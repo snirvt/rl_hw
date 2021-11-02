@@ -6,7 +6,8 @@ from cheats import new_reset, modify_env
 def get_P():
     env = gym.make('Taxi-v3')
     P = {}
-    T = {} # terminal states
+    Terminals = {} # terminal states
+    Posibble_Transitions = {}
     for state in range(500):
         for action in range(6):
             env.reset()
@@ -14,11 +15,13 @@ def get_P():
             observation, reward, done, info = env.step(action)
             if state not in P:
                 P[state] = {}
+                Posibble_Transitions[state] = set()
             if done: # if terminal state
-                T[state] = []
+                Terminals[state] = []
             P[state][action] = [(1.0, observation, reward, done)]
-    return P, T
-# P, T = get_P()
+            Posibble_Transitions[state].add(observation)
+    return P, Terminals, Posibble_Transitions
+# P, T, PT = get_P()
     
 
 
