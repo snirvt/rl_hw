@@ -22,4 +22,13 @@ def get_P():
     
 
 
+def can_s1_go_to_s2(P, s1, s2):
+    for a in range(6):
+        if s2 == P[s1][a][0][1]:
+            return True
+    return False
+
+
+
+
 
