@@ -17,7 +17,7 @@ def get_P():
                 P[state] = {}
                 Posibble_Transitions[state] = set()
             if done: # if terminal state
-                Terminals[state] = []
+                Terminals[observation] = []
             P[state][action] = [(1.0, observation, reward, done)]
             Posibble_Transitions[state].add(observation)
     return P, Terminals, Posibble_Transitions
