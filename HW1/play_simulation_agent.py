@@ -4,7 +4,7 @@ from policy_iteration import policy_iteration
 from P_learner import get_P
 
 GAMMA = 0.95
-P, T, PT = get_P()
+P, T, PT = get_P() ## get the transition matrix
 policy, value, value_sum = policy_iteration(P, T, PT, GAMMA)
 
 

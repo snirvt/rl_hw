@@ -23,8 +23,8 @@ def policy_evaluation(policy, value, P, T, PT, GAMMA=0.95): # evaluating a given
         v_temp = 0
         if s not in T: # not in terminal state
             for a in range(6):
-                PI_a_s = policy[s][a]
-                R_a_s = P[s][a][0][2]
+                PI_a_s = policy[s][a] ## chance of doing a when in s
+                R_a_s = P[s][a][0][2] ## reward of being in s and doing a
                 s_next = P[s][a][0][1]
                 v_temp += PI_a_s*(R_a_s + GAMMA * value[s_next]) # since P(s,a) is deterministic no need to loop over S'.
         new_value[s] = v_temp
@@ -45,7 +45,7 @@ def policy_improvment(value, P, GAMMA=0.95):
     return new_policy
 
 
-def policy_iteration(P, T, PT, GAMMA=0.95):
+def policy_iteration(P, T, PT, GAMMA=0.95, quit_when_optimal = True):
     policy = init_policy(P)
     value = init_value(P)
     value_sum = []
@@ -55,7 +55,7 @@ def policy_iteration(P, T, PT, GAMMA=0.95):
         policy = policy_improvment(value, P, GAMMA)
         value_sum.append(sum(value.values()))
 
-        if all(all(old_policy[s] == policy[s]) for s in P.keys()):
+        if quit_when_optimal and all(all(old_policy[s] == policy[s]) for s in P.keys()):
             print('Optimal Policy at: {} steps'.format(cnt))
             break
     return policy, value, value_sum
