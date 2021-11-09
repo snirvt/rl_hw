@@ -1,5 +1,5 @@
 import numpy as np
-
+import gym
 from P_learner import get_P
 
 
@@ -46,6 +46,7 @@ def policy_improvment(value, P, GAMMA=0.95):
 
 
 def policy_iteration(P, T, PT, GAMMA=0.95, quit_when_optimal = True):
+    env_stub = gym.make('Taxi-v3')
     policy = init_policy(P)
     value = init_value(P)
     value_sum = []
@@ -53,7 +54,12 @@ def policy_iteration(P, T, PT, GAMMA=0.95, quit_when_optimal = True):
         old_policy = policy.copy()
         value = policy_evaluation(policy, value, P, T, PT, GAMMA)
         policy = policy_improvment(value, P, GAMMA)
-        value_sum.append(sum(value.values()))
+        internal_value_sum = 0
+        for state in range(500):
+            taxi_row, taxi_col, pass_loc, dest_idx = env_stub.decode(env_stub.env.s)
+            if pass_loc != 4:
+                internal_value_sum += value[state]
+        value_sum.append(internal_value_sum)
 
         if quit_when_optimal and all(all(old_policy[s] == policy[s]) for s in P.keys()):
             print('Optimal Policy at: {} steps'.format(cnt))
