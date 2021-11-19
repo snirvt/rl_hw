@@ -45,26 +45,25 @@ def policy_improvment(value, P, GAMMA=0.95):
     return new_policy
 
 
-def policy_iteration(P, T, PT, GAMMA=0.95, quit_when_optimal = True):
+def policy_iteration(P, T, PT, max_steps = 100, GAMMA=0.95, quit_when_optimal = True, sample_size = 500):
     env_stub = gym.make('Taxi-v3')
     policy = init_policy(P)
     value = init_value(P)
-    value_sum = []
-    for cnt in range(100):
+    value_mean = []
+    for cnt in range(max_steps):
         old_policy = policy.copy()
         value = policy_evaluation(policy, value, P, T, PT, GAMMA)
         policy = policy_improvment(value, P, GAMMA)
         internal_value_sum = 0
-        for state in range(500):
-            taxi_row, taxi_col, pass_loc, dest_idx = env_stub.decode(env_stub.env.s)
-            if pass_loc != 4:
-                internal_value_sum += value[state]
-        value_sum.append(internal_value_sum)
+        for _ in range(sample_size):
+            env_stub.reset()
+            internal_value_sum += value[env_stub.env.s]
+        value_mean.append(internal_value_sum/sample_size)
 
         if quit_when_optimal and all(all(old_policy[s] == policy[s]) for s in P.keys()):
             print('Optimal Policy at: {} steps'.format(cnt))
             break
-    return policy, value, value_sum
+    return policy, value, value_mean
 
 # P, T, PT = get_P()
 # policy, value = policy_iteration(P, T, PT)

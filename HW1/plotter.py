@@ -9,8 +9,10 @@ P, T, PT = get_P()
 
 fig = plt.figure()
 
-for GAMMA in [0.95]:
-    policy, value, value_sum = policy_iteration(P, T, PT, GAMMA=GAMMA, quit_when_optimal = True)
+sample_size = 1000
+for GAMMA in [0.9, 0.95, 0.99]:
+    policy, value, value_sum = policy_iteration(P, T, PT,max_steps = 30, GAMMA=GAMMA,
+                                                quit_when_optimal = False, sample_size = sample_size)
     plt.plot(value_sum, label=GAMMA)
 plt.legend(title="GAMMA")
 fig.suptitle('Value Function Sum Over Iterations', fontsize=20)
