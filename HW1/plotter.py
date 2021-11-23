@@ -15,7 +15,7 @@ for GAMMA in [0.9, 0.95, 0.99]:
                                                 quit_when_optimal = False, sample_size = sample_size)
     plt.plot(value_sum, label=GAMMA)
 plt.legend(title="GAMMA")
-fig.suptitle('Value Function Sum Over Iterations', fontsize=20)
+fig.suptitle('Value Function Mean Over Iterations', fontsize=20)
 plt.xlabel('Iteration Number', fontsize=15) 
 plt.ylabel('Value Function', fontsize=15)
 plt.show()
