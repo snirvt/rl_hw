@@ -7,7 +7,7 @@ GAMMA = 0.95
 render_img = False
 print_vals = True
 P, T, PT = get_P() ## get the transition matrix
-for max_steps in [20]:
+for max_steps in [5, 10, 20]:
     policy, value, value_sum = policy_iteration(P, T, PT, max_steps = max_steps, GAMMA=GAMMA, quit_when_optimal = True)
     inp = input('Done training for {} steps.\npress enter for simulation...'.format(max_steps))
 
@@ -48,15 +48,3 @@ for max_steps in [20]:
             break
     env.close()
     print('Games over\nNumber of steps: {}\nTotal reward: {}\n'.format(num_step+1, total_reward))
-
-
-
-
-
-# for state in range(500):
-#     taxi_row, taxi_col, pass_loc, dest_idx = env.decode(state)
-#     print(pass_loc, dest_idx)
-    
-
-
-
