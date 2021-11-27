@@ -22,14 +22,14 @@ eps_updater = LinearDecay(eps = 1 , p = 0.99)
 
 dict_plot = {}
 
-for LAMBDA in [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]:#[0, 0.1, 0.2, 0.3]:
-    for ALPHA in [0.01, 0.1, 0.2, 0.3, 0.4]:#[0.01, 0.1, 0.3, 0.5]:
+for LAMBDA in [0, 0.1, 0.2, 0.3, 0.4]:
+    for ALPHA in [0.1, 0.2, 0.3, 0.4]:
         param_dict = {'GAMMA': GAMMA,'ALPHA': ALPHA, 'LAMBDA': LAMBDA, 'sample_size': sample_size,
                     'eps': eps, 'decay_rate': decay_rate, 'n_steps': n_steps, 'step_size': step_size,
-                    'elegability_trace': elegability_trace, 'eps_updater': LinearDecay(eps = 1 , p = 0.99, min_eps=0)}
+                    'elegability_trace': elegability_trace, 'eps_updater': LinearDecay(eps = 0.1, p = 0.95, min_eps=0)}
         Q, value_mean, bestQ  = QLearning(param_dict)
         dict_plot[(GAMMA, ALPHA, LAMBDA)] = (np.arange(len(value_mean))*step_size,value_mean, value_mean, (GAMMA, ALPHA, LAMBDA))
-        np.save("dict_plot_eps_0.99.npy", dict_plot)
+        # np.save("dict_plot_discounted_eps_0.1_0.95.npy", dict_plot)
         plt.plot(np.arange(len(value_mean))*step_size,value_mean, label=(GAMMA, ALPHA, LAMBDA))
 plt.legend(title="GAMMA, ALPHA, LAMBDA")
 fig.suptitle('Value Function Mean Over Iterations', fontsize=20)
@@ -40,11 +40,13 @@ plt.show()
 
 
 
-dict_plot=np.load("dict_plot.npy", allow_pickle=True).item()
+
+
+dict_plot=np.load("dict_plot_discounted_eps_0.1_0.95.npy", allow_pickle=True).item()
 GAMMA = 0.95
 fig = plt.figure()
-for LAMBDA in [0.1,0.2,0.3,0.4]:  # 0, 0.1, 0.2, 0.3, 0.4
-    for ALPHA in [0.1,0.2,0.3,0.4]: # 0.01, 0.1, 0.2, 0.3
+for LAMBDA in [0, 0.2]:
+    for ALPHA in [0.1, 0.2, 0.3, 0.4]:
         x = dict_plot[(GAMMA, ALPHA, LAMBDA)][0]
         value = dict_plot[(GAMMA, ALPHA, LAMBDA)][1]
         par = dict_plot[(GAMMA, ALPHA, LAMBDA)][-1]

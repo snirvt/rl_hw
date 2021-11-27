@@ -17,23 +17,22 @@ def epsilon_greedy(q_s, eps=0.1):
     return np.argmax(q_s)
 
 def get_eligibility_trace(Q):
-    E_t = {} ## counts when it was last updated
     E = {}
     for s in Q.keys():
         E[s] = [0]*len(Q[s])
-        # E_t[s] = [0]*len(Q[s])
-        # E[s] = np.zeros(len(Q[s]))
     return E
 
 
-def evaluate_policy(Q, env, sample_size = 1000):
+def evaluate_policy(Q, env, GAMMA, sample_size = 1000):
     reward_sum = 0
     for _ in range(sample_size):
         s = env.reset()
+        step_count = 0
         while True:
             a = np.argmax(Q[s])
             s, reward, done, info = env.step(a)
-            reward_sum += reward
+            reward_sum += (GAMMA**step_count) * reward
+            step_count += 1
             if done:
                 s = env.reset()
                 break
@@ -66,7 +65,7 @@ def QLearning(param_dict):
     
     for i in range(n_steps):
         if i % step_size == 0:
-            value.append(evaluate_policy(Q, env_t, sample_size))
+            value.append(evaluate_policy(Q, env_t, GAMMA, sample_size))
             print('val: {}, eps {}'.format(value[-1], eps))
             if value[-1] > best_value:
                 best_value = value[-1]
@@ -80,7 +79,6 @@ def QLearning(param_dict):
               
         if reward > 0:
             eps = eps_updater()
-            # print('Goal')
 
         delta = reward + GAMMA*Q[s_next][np.argmax(Q[s_next])] - Q[s][a]
         if elegability_trace and LAMBDA > 0:
