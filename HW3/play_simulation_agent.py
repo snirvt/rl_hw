@@ -14,23 +14,21 @@ import matplotlib.pyplot as plt
 fig = plt.figure()
 
 sample_size = 250
-n_steps = 200000
+n_steps = 100000
 step_size = 10000
 eps = 1
 decay_rate = 0.95
 elegability_trace = True
 GAMMA = 1
-
 dict_plot = {}
-for LAMBDA in [0]:
-    for ALPHA in [0.02]:
-        param_dict = {'GAMMA': GAMMA,'ALPHA': ALPHA, 'LAMBDA': LAMBDA, 'sample_size': sample_size,
-                    'eps': eps, 'decay_rate': decay_rate, 'n_steps': n_steps, 'step_size': step_size,
-                    'elegability_trace': elegability_trace}
-        Q, value_mean, bestQ = SARSA(param_dict)
-        plt.plot(np.arange(len(value_mean))*step_size,value_mean, label=(GAMMA, ALPHA, LAMBDA, p))
-plt.legend(title="GAMMA, ALPHA, LAMBDA")
-fig.suptitle('Value Function Mean Over Iterations', fontsize=20)
+for ALPHA in [0.01]:
+    param_dict = {'GAMMA': GAMMA,'ALPHA': ALPHA, 'sample_size': sample_size,
+                'eps': eps, 'decay_rate': decay_rate, 'n_steps': n_steps, 'step_size': step_size,
+                'elegability_trace': elegability_trace}
+    Q, value_mean, bestQ = SARSA(param_dict)
+    plt.plot(np.arange(len(value_mean))*step_size,value_mean, label=(GAMMA, ALPHA))
+plt.legend(title="GAMMA, ALPHA")
+fig.suptitle('Q Function Mean Over Iterations', fontsize=20)
 plt.xlabel('Iteration Number', fontsize=15) 
 plt.ylabel('Value Function', fontsize=15)
 plt.show()
@@ -38,9 +36,6 @@ plt.show()
 
 
 # np.save("bestQ.npy", bestQ)
-
-
-
 
 
 
