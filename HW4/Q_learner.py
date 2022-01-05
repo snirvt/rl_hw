@@ -4,7 +4,7 @@ from scipy.special import softmax
     
 def init_W(n_actions = 3, n_features = 5):
     return np.random.randn(n_actions, n_features)/np.sqrt(n_actions * n_features)
-    
+
 def get_Q(f_s, A, W):
     return f_s @ W[A] 
 
@@ -35,14 +35,17 @@ def get_mean_w(f_s, W, actions):
     
 def sample_gaussian_action(f_s, W, Theta, var):
     mean = (f_s @ Theta.T)
-    value = (f_s @ W.T)
     action = np.random.normal(mean, var)
     clipped_action = np.tanh(action) * 2
+    # value = (np.concatenate([np.array([mean]),f_s]) @ W.T)
+    value = (np.concatenate([np.array([clipped_action]),f_s]) @ W.T)
     return clipped_action, value, mean
     
         
-    
-  
+def get_mean_action(f_s, Theta):
+    action = (f_s @ Theta.T)
+    clipped_action = np.tanh(action) * 2
+    return clipped_action
 
 
     
